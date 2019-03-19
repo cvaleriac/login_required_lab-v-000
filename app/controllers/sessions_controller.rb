@@ -2,14 +2,21 @@ class SessionsController < ApplicationController
   def new
   end
 
+  def home
+  end
+
   def create
-      return redirect_to action: 'new' if params[:name].nil? or params[:name].empty?
+    if params[:name].nil? || params[:name].empty?
+      redirect_to '/new'
+    else
       session[:name] = params[:name]
-      redirect_to '/'
+      redirect_to '/home'
+    end
   end
 
   def destroy
-    session.delete :name
-    redirect_to '/'
+    session[:name] = nil
+    redirect_to '/new'
   end
+
 end
