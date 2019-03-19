@@ -1,20 +1,16 @@
 class SecretssController < ApplicationController
-  before_action :current_user
+  before_action :require_login
+  skip_before_action :require_login, only: [:show]
 
- def show
-   @document = Document.find(params[:id])
- end
+  def show
+    if current_user
+      render :show
+    else
+      redirect_to '/new'
+    end
+  end
 
- def index
- end
-
- def create
-   @document = Document.create(author_id: user_id)
- end
-
- private
-
- def current_user
-   return head(:forbidden) unless session.include? :user_id
- end
+  def require_login
+    return head(:forbidden) unless session.include? :name
+  end
 end
